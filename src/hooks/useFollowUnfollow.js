@@ -20,6 +20,7 @@ const useFollowUnfollow = (user) => {
 		try {
 			const res = await fetch(`https://threadsapp-backend.onrender.com/api/users/follow/${user._id}`, {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},

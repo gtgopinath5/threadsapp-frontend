@@ -39,6 +39,7 @@ export default function UpdateProfilePage() {
 		try {
 			const res = await fetch(`https://threadsapp-backend.onrender.com/api/users/update/${user._id}`, {
 				method: "PUT",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},

@@ -41,6 +41,7 @@ const MessageInput = ({ setMessages }) => {
 		try {
 			const res = await fetch("https://threadsapp-backend.onrender.com/api/messages", {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},

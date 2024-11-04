@@ -12,6 +12,7 @@ const LogoutButton = () => {
 		try {
 			const res = await fetch("https://threadsapp-backend.onrender.com/api/users/logout", {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},

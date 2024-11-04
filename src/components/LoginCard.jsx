@@ -36,6 +36,7 @@ export default function LoginCard() {
 		try {
 			const res = await fetch("https://threadsapp-backend.onrender.com/api/users/login", {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},
