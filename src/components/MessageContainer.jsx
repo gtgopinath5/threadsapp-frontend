@@ -86,7 +86,7 @@ const MessageContainer = () => {
             setMessages([]);
             try {
                 if (!selectedConversation?.mock) {
-                    const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+                    const res = await fetch(`https://threadsapp-backend.onrender.com/api/messages/${selectedConversation.userId}`);
                     const data = await res.json();
                     if (data.error) {
                         showToast("Error", data.error, "error");
