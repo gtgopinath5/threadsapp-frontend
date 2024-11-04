@@ -10,36 +10,33 @@ const HomePage = () => {
     const [posts, setPosts] = useRecoilState(postsAtom);
     const [loading, setLoading] = useState(true);
     const showToast = useShowToast();
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        const getFeedPosts = async () => {
+        const fetchFeedPosts = async () => {
             setLoading(true);
             setPosts([]);
-            const token = localStorage.getItem("token");
-
             try {
                 const res = await fetch("https://threadsapp-backend.onrender.com/api/posts/feed", {
                     method: "GET",
-					credentials: "include",
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
 
-                if (res.status === 401) {
+                if (!res.ok) {
                     const errorData = await res.json();
-                    showToast("Error", errorData.message || "Unauthorized access. Please log in.", "error");
+                    console.error("Fetch feed posts error:", errorData);
+                    if (res.status === 401) {
+                        showToast("Error", errorData.message || "Unauthorized access. Please log in.", "error");
+                        return;
+                    }
+                    showToast("Error", errorData.message || "Failed to fetch feed posts", "error");
                     return;
                 }
 
                 const data = await res.json();
-
-                if (data.error) {
-                    showToast("Error", data.error, "error");
-                    return;
-                }
-
                 setPosts(data);
             } catch (error) {
                 showToast("Error", error.message, "error");
@@ -47,8 +44,9 @@ const HomePage = () => {
                 setLoading(false);
             }
         };
-        getFeedPosts();
-    }, [showToast, setPosts]);
+
+        fetchFeedPosts();
+    }, [showToast, setPosts, token]);
 
     return (
         <Flex gap='10' alignItems={"flex-start"}>
