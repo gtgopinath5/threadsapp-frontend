@@ -72,7 +72,7 @@ const ChatPage = () => {
         e.preventDefault();
         setSearchingUser(true);
         try {
-            const res = await fetch(`/api/users/profile/${searchText}`);
+            const res = await fetch(`https://threadsapp-backend.onrender.com/api/users/profile/${searchText}`);
             const searchedUser = await res.json();
             if (searchedUser.error) {
                 showToast("Error", searchedUser.error, "error");
