@@ -7,17 +7,26 @@ const SuggestedUsers = () => {
 	const [loading, setLoading] = useState(true);
 	const [suggestedUsers, setSuggestedUsers] = useState([]);
 	const showToast = useShowToast();
+	const token = localStorage.getItem("token"); // Fetch token from storage or context
 
 	useEffect(() => {
 		const getSuggestedUsers = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch("https://threadsapp-backend.onrender.com/api/users/suggested");
-				const data = await res.json();
-				if (data.error) {
-					showToast("Error", data.error, "error");
-					return;
+				const res = await fetch("https://threadsapp-backend.onrender.com/api/users/suggested", {
+					headers: {
+						'Authorization': `Bearer ${token}`, // Add Authorization header
+					},
+					credentials: 'include' // Include credentials if using cookies for authentication
+				});
+
+				// Check if the response is unauthorized
+				if (!res.ok) {
+					const errorData = await res.json();
+					throw new Error(errorData.message || 'Failed to fetch suggested users');
 				}
+
+				const data = await res.json();
 				setSuggestedUsers(data);
 			} catch (error) {
 				showToast("Error", error.message, "error");
@@ -27,7 +36,7 @@ const SuggestedUsers = () => {
 		};
 
 		getSuggestedUsers();
-	}, [showToast]);
+	}, [showToast, token]);
 
 	return (
 		<>
@@ -60,6 +69,7 @@ const SuggestedUsers = () => {
 };
 
 export default SuggestedUsers;
+
 
 // Loading skeletons for suggested users, if u want to copy and paste as shown in the tutorial
 
